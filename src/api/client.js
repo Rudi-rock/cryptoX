@@ -242,3 +242,7 @@ class CryptoSolveAPI {
 
 // Create global API instance
 const api = new CryptoSolveAPI();
+window.api = api; // Make available globally
+
+// Export for ES modules
+export { CryptoSolveAPI };
