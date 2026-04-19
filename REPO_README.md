@@ -6,6 +6,16 @@ A complete, production-ready cryptocurrency exchange platform with trading, P2P 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Node](https://img.shields.io/badge/node-18+-green)
 
+## 🚀 Live Deployment
+
+| Component | URL | Status |
+|-----------|-----|--------|
+| **Frontend** | https://Rudi-rock.github.io/cryptoX | 🟢 Live |
+| **Backend** | https://backend-nine-nu-98.vercel.app/api | 🟢 Live |
+| **Admin Dashboard** | GitHub: `rudibaap-5185s-projects/backend` | 🟢 Active |
+
+> **Note**: Frontend and backend are fully deployed and connected. Configure environment variables in Vercel for real API integrations.
+
 ## Features
 
 - ✅ **User Authentication** - JWT-based auth with Supabase
