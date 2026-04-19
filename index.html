@@ -765,14 +765,11 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- API Client & Main Script -->
-<script type="module">
-// Import API client
-import { CryptoSolveAPI } from './src/api/client.js';
+<!-- API Client -->
+<script src="src/api/client.js"></script>
 
-// Create global API instance
-window.api = window.api || new CryptoSolveAPI();
-
+<!-- Main App Script -->
+<script>
 // ─── STATE ───────────────────────────────────────────────
 let currentPrice = 84.62;
 let userWallet = { usdtBalance: 0, inrBalance: 0, trc20Address: null };

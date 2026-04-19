@@ -244,5 +244,5 @@ class CryptoSolveAPI {
 const api = new CryptoSolveAPI();
 window.api = api; // Make available globally
 
-// Export for ES modules
-export { CryptoSolveAPI };
+// Note: export statement commented out to allow both module and sync script loading
+// export { CryptoSolveAPI };
