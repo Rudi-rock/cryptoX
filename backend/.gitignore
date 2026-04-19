@@ -1,0 +1,16 @@
+node_modules/
+.next/
+dist/
+build/
+out/
+.env.local
+.env.*.local
+.vercel
+.DS_Store
+*.pem
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.eslintcache

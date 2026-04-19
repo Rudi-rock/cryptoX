@@ -1,0 +1,30 @@
+{
+  "name": "cryptosolve-api",
+  "version": "1.0.0",
+  "description": "Next.js 14 backend for USDT/INR crypto exchange",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@supabase/supabase-js": "^2.38.0",
+    "zod": "^3.22.4",
+    "jose": "^5.1.0",
+    "axios": "^1.6.0",
+    "redis": "^4.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.2",
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "eslint": "^8.54.0",
+    "eslint-config-next": "^14.0.0"
+  }
+}
