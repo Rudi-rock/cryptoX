@@ -488,6 +488,83 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
 .flash-green { animation: flashGreen 0.6s ease-out; }
 .flash-red { animation: flashRed 0.6s ease-out; }
 
+/* LOGIN PAGE */
+.login-container {
+  position: fixed; inset: 0; background: var(--bg); z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.3s, visibility 0.3s;
+  opacity: 1; visibility: visible;
+}
+.login-container.hidden {
+  opacity: 0; visibility: hidden; pointer-events: none;
+}
+.login-box {
+  width: 100%; max-width: 420px; padding: 40px;
+  background: var(--card); border: 1px solid var(--border2);
+  border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 40px var(--green-glow);
+}
+.login-header {
+  text-align: center; margin-bottom: 32px;
+}
+.login-title {
+  font-family: var(--display); font-weight: 800; font-size: 32px;
+  color: var(--text); margin-bottom: 8px;
+}
+.login-title span { color: var(--green); }
+.login-subtitle {
+  color: var(--text3); font-size: 14px;
+}
+.login-form {
+  display: flex; flex-direction: column; gap: 16px;
+}
+.form-group {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.form-label {
+  font-size: 12px; color: var(--text2); font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-input {
+  padding: 12px 14px; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text); font-family: var(--sans);
+  font-size: 14px; transition: all 0.2s;
+}
+.form-input:focus {
+  outline: none; border-color: var(--green); background: rgba(0,200,130,0.05);
+  box-shadow: 0 0 12px rgba(0,200,130,0.2);
+}
+.form-input::placeholder { color: var(--text3); }
+.btn-login {
+  padding: 12px 16px; background: linear-gradient(135deg, var(--green), var(--green2));
+  border: none; border-radius: var(--radius-sm); color: var(--bg); font-weight: 600;
+  cursor: pointer; font-size: 14px; transition: all 0.2s; font-family: var(--sans);
+  margin-top: 8px;
+}
+.btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,255,159,0.3);
+}
+.btn-login:active { transform: translateY(0); }
+.btn-login.loading {
+  opacity: 0.7; cursor: not-allowed;
+}
+.toggle-signup {
+  text-align: center; margin-top: 20px; padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+.toggle-signup-text {
+  color: var(--text3); font-size: 13px;
+}
+.toggle-signup-btn {
+  background: none; border: none; color: var(--green); cursor: pointer;
+  font-weight: 600; margin-left: 4px; font-family: var(--sans);
+}
+.toggle-signup-btn:hover { color: var(--green2); text-decoration: underline; }
+.error-msg {
+  color: var(--red); font-size: 12px; text-align: center; margin-top: 12px;
+  min-height: 18px;
+}
+
 /* ACTIVE TAB */
 .page { display: none; }
 .page.active { display: contents; }
@@ -497,6 +574,43 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
 </style>
 </head>
 <body>
+
+<!-- LOGIN PAGE -->
+<div class="login-container" id="login-container">
+  <div class="login-box">
+    <div class="login-header">
+      <div class="login-title">Flow<span>X</span></div>
+      <div class="login-subtitle" id="login-subtitle">Sign in to start trading</div>
+    </div>
+    
+    <form class="login-form" id="login-form" onsubmit="handleLoginSubmit(event)">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" class="form-input" id="email-input" placeholder="you@example.com" required/>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="password-input" placeholder="••••••••" required/>
+      </div>
+      
+      <div class="form-group" id="confirm-password-group" style="display:none;">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" class="form-input" id="confirm-password-input" placeholder="••••••••"/>
+      </div>
+      
+      <button type="submit" class="btn-login" id="submit-btn">Sign In</button>
+      
+      <div class="error-msg" id="error-msg"></div>
+    </form>
+    
+    <div class="toggle-signup">
+      <span class="toggle-signup-text" id="toggle-text">Don't have an account?</span>
+      <button type="button" class="toggle-signup-btn" id="toggle-btn" onclick="toggleAuthMode()">Sign Up</button>
+    </div>
+  </div>
+</div>
+
 <div class="app">
 
 <!-- NAV -->
@@ -513,7 +627,7 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
     <div class="rate-ticker" id="nav-rate">
       1 USDT = <span class="val" id="nav-rate-val">₹84.62</span>
     </div>
-    <button class="btn-connect" onclick="openConnectModal()">Connect Wallet</button>
+    <button class="btn-connect" id="nav-btn" onclick="handleNavButtonClick()">Connect Wallet</button>
   </div>
 </nav>
 
@@ -661,7 +775,7 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
         </div>
 
         <!-- Submit -->
-        <button class="btn-trade buy" id="submit-btn" onclick="submitOrder()">
+        <button class="btn-trade buy" id="trade-submit-btn" onclick="submitOrder()">
           BUY USDT
         </button>
       </div>
@@ -770,6 +884,148 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
 
 <!-- Main App Script -->
 <script>
+
+// ─── AUTHENTICATION ───────────────────────────────────────
+let isSignupMode = false;
+
+function toggleAuthMode() {
+  isSignupMode = !isSignupMode;
+  const container = document.getElementById('login-container');
+  const submitBtn = document.getElementById('submit-btn');
+  const subtitleEl = document.getElementById('login-subtitle');
+  const toggleText = document.getElementById('toggle-text');
+  const toggleBtn = document.getElementById('toggle-btn');
+  const confirmGroup = document.getElementById('confirm-password-group');
+  const form = document.getElementById('login-form');
+  
+  if (isSignupMode) {
+    subtitleEl.textContent = 'Create your account';
+    submitBtn.textContent = 'Sign Up';
+    toggleText.textContent = 'Already have an account?';
+    toggleBtn.textContent = 'Sign In';
+    confirmGroup.style.display = 'flex';
+  } else {
+    subtitleEl.textContent = 'Sign in to start trading';
+    submitBtn.textContent = 'Sign In';
+    toggleText.textContent = "Don't have an account?";
+    toggleBtn.textContent = 'Sign Up';
+    confirmGroup.style.display = 'none';
+  }
+  
+  // Clear error message
+  document.getElementById('error-msg').textContent = '';
+}
+
+async function handleLoginSubmit(event) {
+  event.preventDefault();
+  
+  const email = document.getElementById('email-input').value.trim();
+  const password = document.getElementById('password-input').value;
+  const confirmPassword = document.getElementById('confirm-password-input').value;
+  const errorEl = document.getElementById('error-msg');
+  const submitBtn = document.getElementById('submit-btn');
+  
+  errorEl.textContent = '';
+  
+  // Validation
+  if (!email || !password) {
+    errorEl.textContent = 'Please fill in all fields';
+    return;
+  }
+  
+  if (isSignupMode) {
+    if (password.length < 6) {
+      errorEl.textContent = 'Password must be at least 6 characters';
+      return;
+    }
+    if (password !== confirmPassword) {
+      errorEl.textContent = 'Passwords do not match';
+      return;
+    }
+  }
+  
+  // Disable button during request
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+  submitBtn.textContent = isSignupMode ? 'Creating account...' : 'Signing in...';
+  
+  try {
+    let response;
+    if (isSignupMode) {
+      response = await window.api.signup(email, password, confirmPassword);
+    } else {
+      response = await window.api.login(email, password);
+    }
+    
+    if (response.token) {
+      // Login successful
+      showLoginSuccess(email);
+      setTimeout(() => {
+        hideLoginPage();
+      }, 800);
+    } else {
+      errorEl.textContent = response.error || (isSignupMode ? 'Signup failed' : 'Login failed');
+    }
+  } catch (error) {
+    errorEl.textContent = error.message || (isSignupMode ? 'Signup failed' : 'Login failed');
+    console.error('Auth error:', error);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('loading');
+    submitBtn.textContent = isSignupMode ? 'Sign Up' : 'Sign In';
+  }
+}
+
+function hideLoginPage() {
+  const container = document.getElementById('login-container');
+  container.classList.add('hidden');
+}
+
+function showLoginSuccess(email) {
+  showToast(`✓ Welcome, ${email}!`);
+  isAuthenticated = true;
+  updateNavButton();
+}
+
+function checkAuthStatus() {
+  const token = window.api?.getToken();
+  if (token) {
+    hideLoginPage();
+  } else {
+    // Show login page
+    document.getElementById('login-container').classList.remove('hidden');
+  }
+}
+
+function handleNavButtonClick() {
+  if (isAuthenticated) {
+    // Logout
+    window.api.logout();
+    isAuthenticated = false;
+    showToast('✓ Logged out');
+    // Reset to login page
+    isSignupMode = false;
+    document.getElementById('email-input').value = '';
+    document.getElementById('password-input').value = '';
+    document.getElementById('confirm-password-input').value = '';
+    document.getElementById('error-msg').textContent = '';
+    document.getElementById('login-container').classList.remove('hidden');
+    updateNavButton();
+  } else {
+    // Show wallet connect (placeholder)
+    openConnectModal();
+  }
+}
+
+function updateNavButton() {
+  const btn = document.getElementById('nav-btn');
+  if (isAuthenticated) {
+    btn.textContent = 'Logout';
+  } else {
+    btn.textContent = 'Connect Wallet';
+  }
+}
+
 // ─── STATE ───────────────────────────────────────────────
 let currentPrice = 84.62;
 let userWallet = { usdtBalance: 0, inrBalance: 0, trc20Address: null };
@@ -1044,8 +1300,8 @@ function setTradeTab(type) {
   tradeType = type;
   document.getElementById('tab-buy').className = 'trade-tab buy' + (type==='buy'?' active':'');
   document.getElementById('tab-sell').className = 'trade-tab sell' + (type==='sell'?' active':'');
-  document.getElementById('submit-btn').className = 'btn-trade ' + type;
-  document.getElementById('submit-btn').textContent = (type==='buy'?'BUY':'SELL') + ' USDT';
+  document.getElementById('trade-submit-btn').className = 'btn-trade ' + type;
+  document.getElementById('trade-submit-btn').textContent = (type==='buy'?'BUY':'SELL') + ' USDT';
   document.getElementById('bal-cur').textContent = type==='buy' ? 'INR' : 'USDT';
   if (api.getToken()) {
     updateWalletDisplay();
@@ -1373,10 +1629,16 @@ renderHistory();
 if (api.getToken()) {
   isAuthenticated = true;
   loadUserData();
+  hideLoginPage();
 } else {
   // Set default balance display
   document.getElementById('bal-val').textContent = '50,000';
+  // Show login page if not authenticated
+  document.getElementById('login-container').classList.remove('hidden');
 }
+
+// Update nav button state
+updateNavButton();
 
 // Intervals
 setInterval(tickPrice, 1800);
