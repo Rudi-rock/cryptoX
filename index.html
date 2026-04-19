@@ -766,9 +766,9 @@ main { display: grid; grid-template-columns: 1fr 380px; gap: 0; flex: 1; min-hei
 <div class="toast" id="toast"></div>
 
 <!-- API Client -->
-<script src="src/api/client.js"></script>
+<script type="module" src="src/api/client.js"></script>
 
-<script>
+<script type="module">
 // ─── STATE ───────────────────────────────────────────────
 let currentPrice = 84.62;
 let userWallet = { usdtBalance: 0, inrBalance: 0, trc20Address: null };
