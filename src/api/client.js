@@ -1,5 +1,8 @@
 // API Client for CryptoSolve Exchange
-const API_BASE_URL = 'https://backend-nine-nu-98.vercel.app/api'; // Production backend on Vercel
+// Use local backend in development, production Vercel backend otherwise
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001/api'
+  : 'https://backend-nine-nu-98.vercel.app/api';
 
 class CryptoSolveAPI {
   constructor() {

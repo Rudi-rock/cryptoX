@@ -1384,6 +1384,9 @@ setInterval(addTrade, 1500);
 renderOrderBook();
 addTrade();
 
+// Fetch initial price from API
+fetchPriceFromAPI().catch(err => console.error('Failed to fetch initial price:', err));
+
 // Initialize trade tab display
 setTradeTab('buy');
 </script>
