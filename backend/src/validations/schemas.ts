@@ -56,7 +56,7 @@ export const KYCSubmissionSchema = z.object({
 // Withdrawal Schemas
 export const WithdrawINRSchema = z.object({
   amount: z.number().positive('Amount must be positive'),
-  upiId: z.string().includes('@', 'Invalid UPI ID'),
+  upiId: z.string().refine(val => val.includes('@'), 'Invalid UPI ID'),
 });
 
 export const WithdrawUSDTSchema = z.object({

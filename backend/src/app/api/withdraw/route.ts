@@ -3,7 +3,7 @@ import { supabase } from '@/lib/supabase';
 import { requestPayout } from '@/lib/cashfree';
 import { transferUSDT } from '@/lib/tatum';
 import { WithdrawINRSchema, WithdrawUSDTSchema } from '@/validations/schemas';
-import { v4 as uuidv4 } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {

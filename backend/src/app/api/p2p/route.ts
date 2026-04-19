@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { CreateP2PAd } from '@/validations/schemas';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // Fetch all active P2P ads
     const { data: ads, error: adsError } = await supabase

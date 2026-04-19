@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
 
   // Extract and verify JWT token from Authorization header
   const authHeader = request.headers.get('Authorization');
-  const token = extractToken(authHeader);
+  const token = extractToken(authHeader ?? undefined);
 
   if (!token) {
     return NextResponse.json(

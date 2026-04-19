@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { getUSDTINRPrice } from '@/lib/price';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Fetch current USDT/INR price
     const priceData = await getUSDTINRPrice();

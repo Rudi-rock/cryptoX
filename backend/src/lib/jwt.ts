@@ -1,19 +1,17 @@
-import { SignJWT, jwtVerify } from 'jose';
+import { SignJWT, jwtVerify, type JWTPayload as JoseJWTPayload } from 'jose';
 
 const secret = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key-min-32-chars-long');
 
-export interface JWTPayload {
+export interface JWTPayload extends JoseJWTPayload {
   userId: string;
   email: string;
-  iat?: number;
-  exp?: number;
 }
 
 /**
  * Sign and create a JWT token
  */
 export async function signJWT(payload: JWTPayload, expiresIn: string = '24h'): Promise<string> {
-  const token = await new SignJWT(payload)
+  const token = await new SignJWT(payload as JoseJWTPayload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(expiresIn)

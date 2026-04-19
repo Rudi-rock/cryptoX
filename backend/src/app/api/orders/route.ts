@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
-import { PlaceOrderSchema, CancelOrderSchema } from '@/validations/schemas';
+import { PlaceOrderSchema } from '@/validations/schemas';
 
 export async function GET(request: NextRequest) {
   try {
@@ -81,14 +81,6 @@ export async function POST(request: NextRequest) {
     if (orderError) {
       throw orderError;
     }
-
-    // Broadcast order via Supabase Realtime
-    await supabase
-      .from('orders')
-      .on('*', { event: '*', schema: 'public' }, (payload) => {
-        console.log('Order change:', payload);
-      })
-      .subscribe();
 
     return NextResponse.json({
       success: true,
